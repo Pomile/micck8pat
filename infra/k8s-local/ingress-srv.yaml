@@ -1,0 +1,27 @@
+apiVersion: apisix.apache.org/v2beta3
+kind: ApisixRoute
+metadata:
+  name: routes
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: 100m
+spec:
+  http:
+  - name: auth
+    match:
+      hosts:
+      - "test.api.demo.test"
+      paths:
+      - "/auth"
+    backends:
+    - serviceName: auth
+      servicePort: 3000
+  - name: binrule
+    match:
+      hosts:
+      - local.httpbin.org
+      paths:
+      - /*
+    backends:
+       - serviceName: httpbin
+         servicePort: 80

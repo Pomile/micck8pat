@@ -1,0 +1,25 @@
+apiVersion: skaffold/v4beta3
+kind: Config
+build:
+  artifacts:
+    - image: codeplanet1/micck8pat-auth
+      context: auth
+      sync:
+        manual:
+          - src: '*/*.ts'
+            dest: .
+        hooks:
+          after:
+            - container:
+                command: ["sh", "-c", "./test.sh"]
+      docker:
+        dockerfile: Dockerfile
+test:
+  - image: codeplanet1/micck8pat-auth
+    custom:
+      - command: "echo test"
+manifests:
+  rawYaml:
+    - ./infra/k8s-local/*
+deploy:
+  kubectl: {}
